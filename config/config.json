@@ -13,13 +13,13 @@
   "key_map": {
     "k1": "v1"
   },
-  "gsil_config": {
+  "gil_config": {
     "required": [
       "key1",
       "object1.object1-value"
     ]
   },
-  "gsil_env": {
+  "gil_env": {
     "values": {
       "config-dir": "/app/config",
       "secret-dir": "/app/config",

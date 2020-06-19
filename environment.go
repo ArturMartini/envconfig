@@ -13,8 +13,8 @@ var (
 )
 
 func loadEnvs() {
-	envsConfigured = gel.GetMap("gsil_env.values")
-	envsRequired = gel.GetList("gsil_env.required")
+	envsConfigured = gel.GetMap("gil_env.values")
+	envsRequired = gel.GetList("gil_env.required")
 	envsParams =  envsConfigured
 	for _, arg := range os.Args {
 		keyValue := strings.Split(arg, "=")

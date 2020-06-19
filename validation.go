@@ -10,18 +10,18 @@ import (
 var (
 	validations = []ValidateType{}
 	mapValidateToField = map[ValidateType]string{
-		ConfigType: "gsil_config.required",
-		EnvType:    "gsil_env.required",
+		configType: "gil_config.required",
+		envType:    "gil_env.required",
 	}
 	mapErrValidType = map[ValidateType]string{
-		ConfigType: "config param",
-		EnvType: "env param",
+		configType: "config param",
+		envType: "env param",
 	}
 )
 
 const (
-	ConfigType ValidateType = 1
-	EnvType ValidateType = 2
+	configType ValidateType = 1
+	envType ValidateType = 2
 )
 
 type ValidateType int
@@ -39,9 +39,9 @@ func validate() error {
 
 func executeValidate(validateType ValidateType) error {
 	switch validateType {
-	case ConfigType:
+	case configType:
 		return validateConfig()
-	case EnvType:
+	case envType:
 		return validateEnv()
 	default:
 		return nil
@@ -64,7 +64,7 @@ func validateEnv() error {
 	}
 
 	if len(missing) > 0 {
-		message := fmt.Sprintf("gsil: error validate %s required fields: %v", mapErrValidType[EnvType], missing)
+		message := fmt.Sprintf("gil: error validate %s required fields: %v", mapErrValidType[envType], missing)
 		log.Warn(message)
 		return errors.New(message)
 	}
@@ -73,7 +73,7 @@ func validateEnv() error {
 
 func validateConfig() error {
 	missing := []string{}
-	requireds := gel.GetList(mapValidateToField[ConfigType])
+	requireds := gel.GetList(mapValidateToField[configType])
 	for _, k := range requireds {
 		value := gel.GetStr(k)
 		if value == "" {
@@ -82,7 +82,7 @@ func validateConfig() error {
 	}
 
 	if len(missing) > 0 {
-		message := fmt.Sprintf("gsil: error validate %s required fields: %v", mapErrValidType[ConfigType], missing)
+		message := fmt.Sprintf("gil: error validate %s required fields: %v", mapErrValidType[configType], missing)
 		log.Warn(message)
 		return errors.New(message)
 	}
@@ -91,13 +91,13 @@ func validateConfig() error {
 
 func extractValidations() {
 	validations = []ValidateType{}
-	conf := gel.GetList(mapValidateToField[ConfigType])
+	conf := gel.GetList(mapValidateToField[configType])
 	if len(conf) > 0 {
-		validations = append(validations, ConfigType)
+		validations = append(validations, configType)
 	}
 
 	if len(envsRequired) > 0 {
-		validations = append(validations, EnvType)
+		validations = append(validations, envType)
 	}
 }
 

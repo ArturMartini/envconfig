@@ -33,14 +33,14 @@ func TestGets(t *testing.T) {
 }
 
 func TestInitializeConfigRequiredError(t *testing.T) {
-	expected := "gsil: error validate config param required fields: [key1 object1.object1-value]"
+	expected := "gil: error validate config param required fields: [key1 object1.object1-value]"
 	err := Initialize("config/config-error.json")
 	validateTest(t, expected, strings.TrimSpace(err.Error()))
 }
 
 func TestInitializeEnvRequiredError(t *testing.T) {
-	expected := "gsil: error validate env param required fields: [config-dir secret-dir]"
-	expected2 := "gsil: error validate env param required fields: [secret-dir config-dir]"
+	expected := "gil: error validate env param required fields: [config-dir secret-dir]"
+	expected2 := "gil: error validate env param required fields: [secret-dir config-dir]"
 	err := Initialize("config/env-error.json")
 	message := strings.TrimSpace(err.Error())
 	match := false
@@ -51,8 +51,8 @@ func TestInitializeEnvRequiredError(t *testing.T) {
 }
 
 func TestInitializeConfigAndEnvRequiredError(t *testing.T) {
-	expected := "gsil: error validate config param required fields: [key1 object2.object1-value]\n" +
-		"gsil: error validate env param required fields: [config-dir secret-dir]\n"
+	expected := "gil: error validate config param required fields: [key1 object2.object1-value]\n" +
+		"gil: error validate env param required fields: [config-dir secret-dir]\n"
 
 	err := Initialize("config/config-env-error.json")
 

@@ -4,13 +4,13 @@
     "object1-value": "value1",
     "object2-value": "value2"
   },
-  "gsil_config": {
+  "gil_config": {
     "required": [
       "key1",
       "object2.object1-value"
     ]
   },
-  "gsil_env": {
+  "gil_env": {
     "values": {
       "config-dir": "",
       "secret-dir": "",
