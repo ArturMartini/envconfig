@@ -8,13 +8,13 @@ import (
 )
 
 func TestInitialize(t *testing.T) {
-	err := Initialize("config/config.json")
+	err := Initialize("test/config.json")
 	validateTest(t, nil, err)
 }
 
 func TestGets(t *testing.T) {
 	os.Args = append(os.Args, "address=test")
-	err := Initialize("config/config.json")
+	err := Initialize("test/config.json")
 	validateTest(t, nil, err)
 
 	vEnvStr := GetStr("address")
@@ -34,14 +34,14 @@ func TestGets(t *testing.T) {
 
 func TestInitializeConfigRequiredError(t *testing.T) {
 	expected := "gil: error validate config param required fields: [key1 object1.object1-value]"
-	err := Initialize("config/config-error.json")
+	err := Initialize("test/config-error.json")
 	validateTest(t, expected, strings.TrimSpace(err.Error()))
 }
 
 func TestInitializeEnvRequiredError(t *testing.T) {
 	expected := "gil: error validate env param required fields: [config-dir secret-dir]"
 	expected2 := "gil: error validate env param required fields: [secret-dir config-dir]"
-	err := Initialize("config/env-error.json")
+	err := Initialize("test/env-error.json")
 	message := strings.TrimSpace(err.Error())
 	match := false
 	if message == expected || message == expected2 {
@@ -54,13 +54,13 @@ func TestInitializeConfigAndEnvRequiredError(t *testing.T) {
 	expected := "gil: error validate config param required fields: [key1 object2.object1-value]\n" +
 		"gil: error validate env param required fields: [config-dir secret-dir]\n"
 
-	err := Initialize("config/config-env-error.json")
+	err := Initialize("test/config-env-error.json")
 
 	validateTest(t, len(expected), len(err.Error()))
 }
 
 func TestCleanup(t *testing.T) {
-	Initialize("config/config.json")
+	Initialize("test/config.json")
 	v := GetStr("key1")
 	validateTest(t, "value1", v)
 	cleanup()
@@ -69,7 +69,7 @@ func TestCleanup(t *testing.T) {
 }
 
 func TestEnvDefault(t *testing.T) {
-	Initialize("config/config.json")
+	Initialize("test/config.json")
 	v := GetStr("http-port")
 	validateTest(t, "8080", v)
 }
