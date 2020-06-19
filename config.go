@@ -23,7 +23,7 @@ func Initialize(path string) error {
 func GetStr(key string) string {
 	v, ok := envsParams[key]
 	if ok {
-		return *v
+		return v
 	}
 	return gel.GetStr(key)
 }
@@ -78,7 +78,7 @@ func loadConfig(path string) error {
 }
 
 func cleanup() {
-	envsParams     = map[string]*string{}
+	envsParams     = map[string]string{}
 	envsConfigured = map[string]string{}
 	envsRequired   = []string{}
 	validations = []ValidateType{}

@@ -52,9 +52,11 @@ func TestInitializeEnvRequiredError(t *testing.T) {
 
 func TestInitializeConfigAndEnvRequiredError(t *testing.T) {
 	expected := "gsil: error validate config param required fields: [key1 object2.object1-value]\n" +
-		"gsil: error validate env param required fields: [config-dir secret-dir]"
+		"gsil: error validate env param required fields: [config-dir secret-dir]\n"
+
 	err := Initialize("config/config-env-error.json")
-	validateTest(t, expected, strings.TrimSpace(err.Error()))
+
+	validateTest(t, len(expected), len(err.Error()))
 }
 
 func TestCleanup(t *testing.T) {
@@ -64,6 +66,12 @@ func TestCleanup(t *testing.T) {
 	cleanup()
 	v2 := GetStr("key1")
 	validateTest(t, "", v2 )
+}
+
+func TestEnvDefault(t *testing.T) {
+	Initialize("config/config.json")
+	v := GetStr("http-port")
+	validateTest(t, "8080", v)
 }
 
 func validateTest(t *testing.T, expected, actual interface{}) {
