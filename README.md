@@ -10,7 +10,7 @@ GIL is a library to simplify initialize golang program based on json file and va
 * Abstract the complex bind and validate structure
 
 Commonly systems need get variable environments, properties in config file
-and validate some. Our library can help you to simplify this process.
+and validate some. Our library can hep you to simplify this process.
 
 Usage:
 ```go
@@ -29,5 +29,60 @@ func doSomething(param string) {
 }
 ```
 
+Validation:
+```json
+  {
+    "foo": "",
+    "gil_config": {
+      "required": [
+        "address"
+      ]
+    }
+  }
+```
 
- 
+```go
+package main
+import (
+"fmt"
+"github.com/arturmartini/gil"
+)
+
+func main() {
+    err := gil.Initialize("with_validation.json")
+    fmt.Println(err.Error()) //error validate config param required fields: [address]
+}
+```
+
+Envs:
+```json
+ {
+  "gil_env": {
+      "values": {
+        "http-port": "8080",
+        "address": ""
+      },
+      "required": [
+        "address"
+      ]
+    }
+ }
+```
+
+```go
+package main
+import (
+"fmt"
+"github.com/arturmartini/gil"
+)
+
+func main() {
+    //go run main.go address="localhost:8081"
+    //When load envs if http-port not found, this map value is set how to default
+    //Note this address is required but we pass address by arguments
+    //So initialize not return error
+    gil.Initialize("with_envs.json")
+    fmt.Println(gil.GetStr("http-port")) //"8080"
+    fmt.Println(gil.GetStr("address"))   //"localhost:8081"
+}
+```
