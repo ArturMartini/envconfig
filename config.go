@@ -82,6 +82,7 @@ func cleanup() {
 	envsConfigured = map[string]string{}
 	envsRequired   = []string{}
 	validations = []ValidateType{}
+	gel.Cleanup()
 }
 
 func generateHash() string {

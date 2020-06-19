@@ -57,6 +57,15 @@ func TestInitializeConfigAndEnvRequiredError(t *testing.T) {
 	validateTest(t, expected, strings.TrimSpace(err.Error()))
 }
 
+func TestCleanup(t *testing.T) {
+	Initialize("config/config.json")
+	v := GetStr("key1")
+	validateTest(t, "value1", v)
+	cleanup()
+	v2 := GetStr("key1")
+	validateTest(t, "", v2 )
+}
+
 func validateTest(t *testing.T, expected, actual interface{}) {
 	if expected != actual {
 		reportError(t, expected, actual)
