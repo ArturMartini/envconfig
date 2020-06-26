@@ -34,16 +34,16 @@ Congiguration inner file:
   {
     "foo": "",
     "envconfig": {
-      //fields required is properties and variable environment and both is validate
+      // fields required is properties and variable environment and both is validate
       "required": [
         "address"
       ],
-      //variable environments to be binding from arguments
+      // variable environments to be binding from arguments
       "envs" :[
         "address",
         "port"
       ],
-      //the default to be definied is default value to key, if key has value in file or enviroment the default value is overrided
+      // the default to be definied is default value to key, if key has value in file or enviroment the default value is overrided
       "default":{
         "port": "8080"
       }
