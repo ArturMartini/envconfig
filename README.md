@@ -47,9 +47,9 @@ Congiguration inner file:
     }
   }
 ```
-The fields required is properties and variable environment and both is validate
-Variable environments to be binding from arguments
-Default to be definied is default value to key, if key has value in file or enviroment the default value is overrided
+* The fields required is properties and variable environment and both is validate
+* Variable environments to be binding from arguments
+* Default to be definied is default value to key, if key has value in file or enviroment the default value is overrided
 
 
 ```go
