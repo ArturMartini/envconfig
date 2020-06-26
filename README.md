@@ -1,5 +1,5 @@
-# Golang Initializer Library (GIL)
-GIL is a library to simplify initialize golang program based on json file and variable environments
+# ENVCONFIG
+Envconfig is a library to simplify initialize golang program based on json file and variable environments with configuration and validation in embedded file or as code
 
 ## Features 
 * Initialize config by json file  
