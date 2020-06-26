@@ -82,7 +82,7 @@ func main() {
     config := &Configuration{
       Envs: []string{"http-port", "address"},
       Required: []string{"address"},
-      Default: {
+      Default: map[string]string{
           "http-port","8080"
       }
     }
