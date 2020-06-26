@@ -1,4 +1,4 @@
-# ENVCONFIG
+  # ENVCONFIG
 Envconfig is a library to simplify initialize golang program based on json file and variable environments with configuration and validation in embedded file or as code
 
 ## Features 
@@ -15,13 +15,13 @@ and validate some. Our library can hep you to simplify this process.
 Usage:
 ```go
 package main
-import "github.com/arturmartini/gil"
+import "github.com/arturmartini/envconfig"
 
 func main() {
     //Process read a config file and this file can
-    //have some metadata to GIL execute validation 
-    gil.Initialize("your_path_config_file.json")
-    doSomething(gil.GetStr("key"))
+    //have some metadata to envconfig execute validation 
+    envconfig.Initialize("your_path_config_file.json")
+    doSomething(envconfig.GetStr("key"))
 }
 
 func doSomething(param string) {
@@ -29,14 +29,24 @@ func doSomething(param string) {
 }
 ```
 
-Validation:
+Congiguration inner file:
 ```json
   {
     "foo": "",
-    "gil_config": {
+    "envconfig": {
+      //fields required is properties and variable environment and both is validate
       "required": [
         "address"
-      ]
+      ],
+      //variable environments to be binding from arguments
+      "envs" :[
+        "address",
+        "port"
+      ],
+      //the default to be definied is default value to key, if key has value in file or enviroment the default value is overrided
+      "default":{
+        "port": "8080"
+      }
     }
   }
 ```
@@ -45,26 +55,29 @@ Validation:
 package main
 import (
 "fmt"
-"github.com/arturmartini/gil"
+"github.com/arturmartini/envconfig"
 )
 
 func main() {
-    err := gil.Initialize("with_validation.json")
-    fmt.Println(err.Error()) //error validate config param required fields: [address]
+    err := envconfig.Initialize("with_validation.json")
+    fmt.Println(err.Error()) //error validate param required fields: [address]
 }
 ```
 
 Envs:
 ```json
  {
-  "gil_env": {
-      "values": {
-        "http-port": "8080",
-        "address": ""
-      },
+  "envconfig": {
+      "envs": [
+        "http-port",
+        "address"
+      ],
       "required": [
         "address"
-      ]
+      ],
+      "default":{
+        "http-port": "8080"
+      }
     }
  }
 ```
@@ -73,7 +86,7 @@ Envs:
 package main
 import (
 "fmt"
-"github.com/arturmartini/gil"
+"github.com/arturmartini/envconfig"
 )
 
 func main() {
@@ -81,8 +94,8 @@ func main() {
     //When load envs if http-port not found, this map value is set how to default
     //Note this address is required but we pass address by arguments
     //So initialize not return error
-    gil.Initialize("with_envs.json")
-    fmt.Println(gil.GetStr("http-port")) //"8080"
-    fmt.Println(gil.GetStr("address"))   //"localhost:8081"
+    envconfig.Initialize("with_envs.json")
+    fmt.Println(envconfig.GetStr("http-port")) //"8080"
+    fmt.Println(envconfig.GetStr("address"))   //"localhost:8081"
 }
 ```
