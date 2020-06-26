@@ -19,8 +19,9 @@ import "github.com/arturmartini/envconfig"
 
 func main() {
     //Process read a config file and this file can
-    //have some metadata to envconfig execute validation 
-    envconfig.Initialize("your_path_config_file.json")
+    //have some metadata to envconfig execute validation
+    //or you can pass metadata as code with Configuration struct in initialize func
+    envconfig.Initialize("your_path_config_file.json", nil)
     doSomething(envconfig.GetStr("key"))
 }
 
@@ -60,29 +61,12 @@ import (
 )
 
 func main() {
-    err := envconfig.Initialize("with_validation.json")
+    err := envconfig.Initialize("with_validation.json", nil)
     fmt.Println(err.Error()) //error validate param required fields: [address]
 }
 ```
 
-Envs:
-```json
- {
-  "envconfig": {
-      "envs": [
-        "http-port",
-        "address"
-      ],
-      "required": [
-        "address"
-      ],
-      "default":{
-        "http-port": "8080"
-      }
-    }
- }
-```
-
+* Validation as code
 ```go
 package main
 import (
@@ -92,10 +76,17 @@ import (
 
 func main() {
     //go run main.go address="localhost:8081"
-    //When load envs if http-port not found, this map value is set how to default
+    //When load envs if http-port not found, this map defaut is set to default value
     //Note this address is required but we pass address by arguments
     //So initialize not return error
-    envconfig.Initialize("with_envs.json")
+    config := &Configuration{
+      Envs: []string{"http-port", "address"},
+      Required: []string{"address"},
+      Default: {
+          "http-port","8080"
+      }
+    }
+    envconfig.Initialize("without_file_validation.json", config)
     fmt.Println(envconfig.GetStr("http-port")) //"8080"
     fmt.Println(envconfig.GetStr("address"))   //"localhost:8081"
 }
