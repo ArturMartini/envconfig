@@ -1,0 +1,16 @@
+{
+  "key": "value1",
+  "object1": {
+    "object1-value": "value1",
+    "object2-value": "value2"
+  },
+  "key_float": 2.01,
+  "key_int": 1,
+  "key_list": [
+    "v1",
+    "v2"
+  ],
+  "key_map": {
+    "k1": "v1"
+  }
+}

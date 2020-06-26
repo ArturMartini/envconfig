@@ -4,19 +4,10 @@
     "object1-value": "value1",
     "object2-value": "value2"
   },
-  "gil_config": {
+  "envconfig": {
     "required": [
       "key1",
-      "object2.object1-value"
-    ]
-  },
-  "gil_env": {
-    "values": {
-      "config-dir": "",
-      "secret-dir": "",
-      "http-port": ""
-    },
-    "required": [
+      "object2.object1-value",
       "config-dir",
       "secret-dir"
     ]

@@ -1,9 +1,9 @@
-package gil
+package envconfig
 
 import (
 	"errors"
 	"fmt"
-	"github.com/ArturMartini/gel"
+	"github.com/arturmartini/extjson"
 	log "github.com/sirupsen/logrus"
 	"strconv"
 	"time"
@@ -13,64 +13,71 @@ const (
 	gsilConfig = "gsilConfig"
 )
 
-func Initialize(path string) error {
+type Configuration struct {
+	Envs     []string
+	Required []string
+	Default  map[string]string
+}
+
+func Initialize(path string, config *Configuration) error {
+	if config == nil {
+		config = &Configuration{}
+	}
 	cleanup()
-	initConfiguration(path)
-	extractValidations()
+	initConfiguration(path, config)
 	return execValidate()
 }
 
 func GetStr(key string) string {
-	v, ok := envsParams[key]
-	if ok {
-		return v
-	}
-	return gel.GetStr(key)
+	return extjson.GetStr(key)
 }
 
 func GetInt(key string) int {
-	return gel.GetInt(key)
+	return extjson.GetInt(key)
 }
 
 func GetFloat(key string) float64 {
-	return gel.GetFloat(key)
+	return extjson.GetFloat(key)
 }
 
 func GetListStr(key string) []string {
-	return gel.GetList(key)
+	return extjson.GetList(key)
 }
 
 func GetMapStr(key string) map[string]string {
-	return gel.GetMap(key)
+	return extjson.GetMap(key)
 }
 
 func execValidate() error {
-	err := validate()
+	errors := []error{}
+
+	err := validateConfig()
 	if err != nil {
-		return err
+		errors = append(errors, err)
 	}
-	return nil
+
+	return checkError(errors)
 }
 
 func load(path, key string) error {
-	err := gel.LoadFile(path, key)
+	err := extjson.LoadFile(path, key)
 	if err != nil {
-		message := fmt.Sprintf("gsil: error load file path: %s", path)
+		message := fmt.Sprintf("envconfig: error load file path: %s", path)
 		log.WithError(err).Warn(message)
 		return errors.New(message)
 	}
 	return nil
 }
 
-func initConfiguration(path string) {
+func initConfiguration(path string, config *Configuration) {
 	loadConfig(path)
-	loadEnvs()
+	loadEnv(config)
 }
 
 func loadConfig(path string) error {
-	err := load(path, gsilConfig + generateHash())
+	err := load(path, gsilConfig+generateHash())
 	if err != nil {
-		message := fmt.Sprintf("gsil: config not detected in path: %s", path)
+		message := fmt.Sprintf("envconfig: config not detected in path: %s", path)
 		log.WithError(err).Warnf(message)
 		return errors.New(message)
 	}
@@ -78,11 +85,9 @@ func loadConfig(path string) error {
 }
 
 func cleanup() {
-	envsParams     = map[string]string{}
-	envsConfigured = map[string]string{}
-	envsRequired   = []string{}
-	validations = []ValidateType{}
-	gel.Cleanup()
+	envsConfigured = []string{}
+	envsRequired = []string{}
+	extjson.Cleanup()
 }
 
 func generateHash() string {

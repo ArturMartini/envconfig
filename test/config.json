@@ -13,22 +13,24 @@
   "key_map": {
     "k1": "v1"
   },
-  "gil_config": {
+  "envconfig": {
+    "envs": [
+      "config-dir",
+      "secret-dir",
+      "http-port",
+      "address"
+    ],
     "required": [
       "key1",
-      "object1.object1-value"
-    ]
-  },
-  "gil_env": {
-    "values": {
+      "object1.object1-value",
+      "config-dir",
+      "secret-dir"
+    ],
+    "default": {
       "config-dir": "/app/config",
       "secret-dir": "/app/config",
       "http-port": "8080",
       "address": ""
-    },
-    "required": [
-      "config-dir",
-      "secret-dir"
-    ]
+    }
   }
-}
+} 

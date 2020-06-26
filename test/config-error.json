@@ -4,21 +4,23 @@
     "object1-value": "value1",
     "object2-value": "value2"
   },
-  "gil_config": {
+  "envconfig": {
+    "envs": [
+      "config-dir",
+      "secret-dir",
+      "http-port",
+      "address"
+    ],
     "required": [
+      "config-dir",
+      "secret-dir",
       "key1",
       "object1.object1-value"
-    ]
-  },
-  "gil_env": {
-    "values": {
+    ],
+    "default": {
       "config-dir": "/app/config",
       "secret-dir": "/app/config",
       "http-port": "8080"
-    },
-    "required": [
-      "config-dir",
-      "secret-dir"
-    ]
+    }
   }
 }
