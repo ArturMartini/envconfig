@@ -13,7 +13,7 @@ var (
 	envsRequired   = []string{}
 )
 
-func loadEnv(config *Configuration) {
+func loadEnv(config *Configuration) error {
 	envsConfigured = extjson.GetList("envconfig.envs")
 	envsConfigured = append(envsConfigured, config.Envs...)
 	mapEnvConfig   := map[string]interface{}{}
@@ -72,4 +72,5 @@ func loadEnv(config *Configuration) {
 	}
 
 	extjson.Add(envsParams)
+	return nil
 }

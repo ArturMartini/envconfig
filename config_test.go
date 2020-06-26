@@ -12,6 +12,13 @@ func TestInitialize(t *testing.T) {
 	validateTest(t, nil, err)
 }
 
+func TestInitializeFileNotFound(t *testing.T) {
+	expected :="envconfig: config not detected in path: not.exists\n"
+	err := Initialize("not.exists", nil)
+	validateTest(t, expected, err.Error())
+}
+
+
 func TestGets(t *testing.T) {
 	os.Args = append(os.Args, "address=test")
 	err := Initialize("test/config.json", nil)

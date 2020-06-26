@@ -24,8 +24,17 @@ func Initialize(path string, config *Configuration) error {
 		config = &Configuration{}
 	}
 	cleanup()
-	initConfiguration(path, config)
-	return execValidate()
+	err := initConfiguration(path, config)
+	if err != nil {
+		return err
+	}
+
+	err = execValidate()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func GetStr(key string) string {
@@ -69,9 +78,18 @@ func load(path, key string) error {
 	return nil
 }
 
-func initConfiguration(path string, config *Configuration) {
-	loadConfig(path)
-	loadEnv(config)
+func initConfiguration(path string, config *Configuration) error {
+	errors := []error{}
+	err := loadConfig(path)
+	if err != nil {
+		errors = append(errors, err)
+	}
+
+	err = loadEnv(config)
+	if err != nil {
+		errors = append(errors, err)
+	}
+	return checkError(errors)
 }
 
 func loadConfig(path string) error {
