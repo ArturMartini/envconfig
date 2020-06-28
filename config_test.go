@@ -20,11 +20,13 @@ func TestInitializeFileNotFound(t *testing.T) {
 
 
 func TestGets(t *testing.T) {
-	os.Args = append(os.Args, "address=test")
+	os.Args = append(os.Args, "address=arg_test")
+	os.Setenv("env_test", "env_test")
 	err := Initialize("test/config.json", nil)
 	validateTest(t, nil, err)
 
-	vEnvStr := GetStr("address")
+	vArgStr := GetStr("address")
+	vEnvStr := GetStr("env_test")
 	vStr := GetStr("key1")
 	vInt := GetInt("key_int")
 	vFloat := GetFloat("key_float")
@@ -36,7 +38,8 @@ func TestGets(t *testing.T) {
 	validateTest(t, 2.01, vFloat)
 	validateTest(t, 2, len(vList))
 	validateTest(t, 1, len(vMap))
-	validateTest(t, "test", vEnvStr)
+	validateTest(t, "arg_test", vArgStr)
+	validateTest(t, "env_test", vEnvStr)
 }
 
 func TestInitializeConfigRequiredError(t *testing.T) {
@@ -90,10 +93,10 @@ func TestAsCodeConfigRequiredComplex( t *testing.T) {
 	validateTest(t, expected, err.Error())
 }
 
-func TestAsCodeConfigEnv( t *testing.T) {
+func TestAsCodeConfigArgs( t *testing.T) {
 	os.Args = append(os.Args, "address=localhost:8080")
 	err := Initialize("test/config-as-code.json", &Configuration{
-		Envs:     []string{"address"},
+		Args:     []string{"address"},
 	})
 
 	addr := GetStr("address")
@@ -101,8 +104,8 @@ func TestAsCodeConfigEnv( t *testing.T) {
 	validateTest(t, nil, err)
 }
 
-func TestAsCodeConfigEnvDefault( t *testing.T) {
-		os.Args = []string{}
+func TestAsCodeConfigDefault( t *testing.T) {
+	os.Args = []string{}
 	err := Initialize("test/config-as-code.json", &Configuration{
 		Default: map[string]string{
 			"http-port": "8081",
@@ -114,9 +117,10 @@ func TestAsCodeConfigEnvDefault( t *testing.T) {
 	validateTest(t, nil, err)
 }
 
-func TestAsCodeConfigEnvOverrideWithDefault( t *testing.T) {
+func TestAsCodeConfigDefaultArgsOverrideWithArg( t *testing.T) {
 	os.Args = []string{"http-port=3000"}
 	err := Initialize("test/config-as-code.json", &Configuration{
+		Args: []string{"http-port"},
 		Default: map[string]string{
 			"http-port": "8081",
 		},
@@ -125,6 +129,28 @@ func TestAsCodeConfigEnvOverrideWithDefault( t *testing.T) {
 	port := GetStr("http-port")
 	validateTest(t, "3000", port)
 	validateTest(t, nil, err)
+}
+
+func TestInitializeWithVariableEnvironment(t *testing.T) {
+	os.Setenv("env1", "localhost:8080")
+	err := Initialize("test/config.json", nil)
+	expected := "localhost:8080"
+	addr := GetStr("env1")
+	validateTest(t, nil, err)
+	validateTest(t, expected, addr)
+}
+
+func TestEnvOrverideDefault(t *testing.T) {
+	os.Setenv("env_override", "override")
+	err := Initialize("test/config.json", &Configuration{
+		Default: map[string]string{
+			"env_override": "any",
+		},
+	})
+	expected := "override"
+	result := GetStr("env_override")
+	validateTest(t, nil, err)
+	validateTest(t, expected, result)
 }
 
 func validateTest(t *testing.T, expected, actual interface{}) {

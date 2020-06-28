@@ -14,11 +14,14 @@
     "k1": "v1"
   },
   "envconfig": {
-    "envs": [
+    "args": [
       "config-dir",
       "secret-dir",
       "http-port",
       "address"
+    ],
+    "envs": [
+      "env1"
     ],
     "required": [
       "key1",

@@ -10,11 +10,12 @@ import (
 )
 
 const (
-	gsilConfig = "gsilConfig"
+	config = "envconfig"
 )
 
 type Configuration struct {
 	Envs     []string
+	Args     []string
 	Required []string
 	Default  map[string]string
 }
@@ -54,7 +55,7 @@ func GetListStr(key string) []string {
 }
 
 func GetMapStr(key string) map[string]string {
-	return extjson.GetMap(key)
+	return extjson.GetMapStr(key)
 }
 
 func execValidate() error {
@@ -85,15 +86,23 @@ func initConfiguration(path string, config *Configuration) error {
 		errors = append(errors, err)
 	}
 
-	err = loadEnv(config)
+	loadDefault(config)
+
+	err = loadArgs(config)
 	if err != nil {
 		errors = append(errors, err)
 	}
+
+	err = loadEnvs(config)
+	if err != nil {
+		errors = append(errors, err)
+	}
+
 	return checkError(errors)
 }
 
 func loadConfig(path string) error {
-	err := load(path, gsilConfig+generateHash())
+	err := load(path, config+generateHash())
 	if err != nil {
 		message := fmt.Sprintf("envconfig: config not detected in path: %s", path)
 		log.WithError(err).Warnf(message)
@@ -102,9 +111,29 @@ func loadConfig(path string) error {
 	return nil
 }
 
+func loadDefault(config *Configuration){
+	values := extjson.GetMapStr("envconfig.default")
+	for k, v := range config.Default {
+		if values == nil {
+			values = map[string]string{}
+		}
+		values[k] = v
+	}
+
+	ec := extjson.GetMap("envconfig")
+	for k, v := range values {
+		if ec == nil {
+			ec = map[string]interface{}{}
+		}
+		ec[k] = v
+	}
+
+	extjson.Add(ec)
+}
+
 func cleanup() {
-	envsConfigured = []string{}
-	envsRequired = []string{}
+	argsConfigured = []string{}
+	argsRequired = []string{}
 	extjson.Cleanup()
 }
 
