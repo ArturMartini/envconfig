@@ -7,18 +7,13 @@ import (
 	"strings"
 )
 
-var (
-	argsConfigured = []string{}
-	argsRequired   = []string{}
-)
-
 func loadArgs(config *Configuration) error {
 	if !extjson.FoundKey("envconfig") && config == nil {
 		log.Warn("envconfig: configuration not found")
 		return nil
 	}
 
-	argsConfigured = extjson.GetList("envconfig.args")
+	argsConfigured := extjson.GetList("envconfig.args")
 	argsConfigured = append(argsConfigured, config.Args...)
 	envsParams := extjson.GetMap("envconfig")
 	envsInnerParams := map[string]interface{}{}
@@ -39,7 +34,7 @@ func loadArgs(config *Configuration) error {
 
 	}
 
-	argsRequired = extjson.GetList("envconfig.required")
+	argsRequired := extjson.GetList("envconfig.required")
 	argsRequired = append(argsRequired, config.Required...)
 
 	if len(argsRequired) > 0 {

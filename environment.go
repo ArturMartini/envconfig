@@ -6,13 +6,8 @@ import (
 	"strings"
 )
 
-var (
-	envsConfigured = []string{}
-	envsRequired   = []string{}
-)
-
 func loadEnvs(config *Configuration) error {
-	envsConfigured = extjson.GetList("envconfig.envs")
+	envsConfigured := extjson.GetList("envconfig.envs")
 	envsConfigured = append(envsConfigured, config.Envs...)
 	envsParams := extjson.GetMap("envconfig")
 	envsInnerParams := map[string]interface{}{}
@@ -24,9 +19,10 @@ func loadEnvs(config *Configuration) error {
 		envsInnerParams = envsParams
 	}
 
-	if len(argsConfigured) > 0 {
+	fieldsRequired := extjson.GetList("envconfig.required")
+	if len(envsConfigured) > 0 {
 		envConfigInterface := []interface{}{}
-		for _, v := range argsRequired {
+		for _, v := range fieldsRequired {
 			envConfigInterface = append(envConfigInterface, v)
 		}
 		envsInnerParams["args"] = envConfigInterface
@@ -37,7 +33,7 @@ func loadEnvs(config *Configuration) error {
 		keyValue := strings.Split(arg, "=")
 		if len(keyValue) > 1 {
 			key := keyValue[0]
-			for _, k := range argsConfigured {
+			for _, k := range envsConfigured {
 				if key != k {
 					continue
 				}

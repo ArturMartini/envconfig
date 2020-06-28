@@ -132,8 +132,6 @@ func loadDefault(config *Configuration){
 }
 
 func cleanup() {
-	argsConfigured = []string{}
-	argsRequired = []string{}
 	extjson.Cleanup()
 }
 
