@@ -131,6 +131,17 @@ func loadDefault(config *Configuration){
 	extjson.Add(ec)
 }
 
+func initBaseMap() (map[string]interface{}, map[string]interface{}) {
+	envsParams := extjson.GetMap("envconfig")
+	envsInnerParams := map[string]interface{}{}
+	if len(envsParams) == 0 {
+		envsParams["envconfig"] = envsInnerParams
+	} else {
+		envsInnerParams = envsParams
+	}
+	return envsParams, envsInnerParams
+}
+
 func cleanup() {
 	extjson.Cleanup()
 }

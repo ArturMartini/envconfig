@@ -12,28 +12,28 @@ func loadArgs(config *Configuration) error {
 		log.Warn("envconfig: configuration not found")
 		return nil
 	}
-
+	envsParams, envsInnerParams := initBaseMap()
 	argsConfigured := extjson.GetList("envconfig.args")
 	argsConfigured = append(argsConfigured, config.Args...)
-	envsParams := extjson.GetMap("envconfig")
-	envsInnerParams := map[string]interface{}{}
-	if envsParams == nil {
-		envsParams = map[string]interface{}{
-			"envconfig": envsInnerParams,
-		}
-	} else {
-		envsInnerParams = envsParams
-	}
+	loadArgsConfigured(argsConfigured, envsInnerParams)
+	loadArgsRequired(config, envsInnerParams)
+	loadArgsByOs(envsParams, argsConfigured)
 
+	extjson.Add(envsParams)
+	return nil
+}
+
+func loadArgsConfigured(argsConfigured []string, envsInnerParams map[string]interface{}) {
 	if len(argsConfigured) > 0 {
 		envConfigInterface := []interface{}{}
 		for _, v := range argsConfigured {
 			envConfigInterface = append(envConfigInterface, v)
 		}
 		envsInnerParams["args"] = envConfigInterface
-
 	}
+}
 
+func loadArgsRequired(config *Configuration, envsInnerParams map[string]interface{}) {
 	argsRequired := extjson.GetList("envconfig.required")
 	argsRequired = append(argsRequired, config.Required...)
 
@@ -44,17 +44,21 @@ func loadArgs(config *Configuration) error {
 		}
 		envsInnerParams["required"] = envReqInterface
 	}
+}
 
-	for _, arg := range os.Args {
-		keyValue := strings.Split(arg, "=")
-		if len(keyValue) > 1 {
-			key := keyValue[0]
-			value := keyValue[1]
-			envsParams[key] = value
-
+func loadArgsByOs(envsParams map[string]interface{}, argsConfigured []string) {
+	if len(argsConfigured) > 0 {
+		for _, arg := range os.Args {
+			keyValue := strings.Split(arg, "=")
+			if len(keyValue) > 1 {
+				key := keyValue[0]
+				value := keyValue[1]
+				for _, k := range argsConfigured {
+					if key == k {
+						envsParams[key] = value
+					}
+				}
+			}
 		}
 	}
-
-	extjson.Add(envsParams)
-	return nil
 }

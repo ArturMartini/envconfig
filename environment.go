@@ -7,42 +7,41 @@ import (
 )
 
 func loadEnvs(config *Configuration) error {
+	envsParams, envsInnerParams := initBaseMap()
 	envsConfigured := extjson.GetList("envconfig.envs")
 	envsConfigured = append(envsConfigured, config.Envs...)
-	envsParams := extjson.GetMap("envconfig")
-	envsInnerParams := map[string]interface{}{}
-	if envsParams == nil {
-		envsParams = map[string]interface{}{
-			"envconfig": envsInnerParams,
-		}
-	} else {
-		envsInnerParams = envsParams
-	}
 
-	fieldsRequired := extjson.GetList("envconfig.required")
+	loadEnvsRequired(config, envsConfigured, envsInnerParams)
+	loadEnvironments(envsConfigured, envsParams)
+	extjson.Add(envsParams)
+	return nil
+}
+
+func loadEnvsRequired(config *Configuration, envsConfigured []string, envsInnerParams map[string]interface{}) {
+	envsRequired := extjson.GetList("envconfig.required")
+	envsRequired = append(envsRequired, config.Required...)
 	if len(envsConfigured) > 0 {
 		envConfigInterface := []interface{}{}
-		for _, v := range fieldsRequired {
+		for _, v := range envsRequired {
 			envConfigInterface = append(envConfigInterface, v)
 		}
 		envsInnerParams["args"] = envConfigInterface
-
 	}
+}
 
-	for _, arg := range os.Environ() {
-		keyValue := strings.Split(arg, "=")
-		if len(keyValue) > 1 {
-			key := keyValue[0]
-			for _, k := range envsConfigured {
-				if key != k {
-					continue
+func loadEnvironments(envsConfigured []string, envsParams map[string]interface{}) {
+	if len(envsConfigured) > 0 {
+		for _, arg := range os.Environ() {
+			keyValue := strings.Split(arg, "=")
+			if len(keyValue) > 1 {
+				key := keyValue[0]
+				for _, k := range envsConfigured {
+					if key == k {
+						value := keyValue[1]
+						envsParams[key] = value
+					}
 				}
 			}
-			value := keyValue[1]
-			envsParams[key] = value
 		}
 	}
-	extjson.Add(envsParams)
-
-	return nil
 }
