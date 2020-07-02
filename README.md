@@ -86,7 +86,7 @@ func main() {
     //Note this address is required but we pass address by arguments
     config := &Configuration{
       Envs: []string{"address"},
-      Agrs: []string{"port"}
+      Agrs: []string{"port"},
       Required: []string{"address"},
       Default: map[string]string{
           "defualt","localhost:8080"
