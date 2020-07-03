@@ -45,7 +45,7 @@ Configuration in file:
         "address",
         "port"
       ],
-      "args]" :[
+      "args" :[
         "arg1" 
       ],
       "default":{
