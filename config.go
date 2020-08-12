@@ -81,9 +81,12 @@ func load(path, key string) error {
 
 func initConfiguration(path string, config *Configuration) error {
 	errors := []error{}
-	err := loadConfig(path)
-	if err != nil {
-		errors = append(errors, err)
+	var err error
+	if path != "" {
+		err := loadConfig(path)
+		if err != nil {
+			errors = append(errors, err)
+		}
 	}
 
 	loadDefault(config)
@@ -111,7 +114,7 @@ func loadConfig(path string) error {
 	return nil
 }
 
-func loadDefault(config *Configuration){
+func loadDefault(config *Configuration) {
 	values := extjson.GetMapStr("envconfig.default")
 	for k, v := range config.Default {
 		if values == nil {
