@@ -1,5 +1,5 @@
-github.com/arturmartini/extjson v0.0.11 h1:cMFi1GggR4vQ14QXnjrzoyQ8gfXtLVMP+luZujgc1j0=
-github.com/arturmartini/extjson v0.0.11/go.mod h1:33dH8g58kYzhh6RYgIE+pJWFF9L+kszFitPRE4YsAgs=
+github.com/arturmartini/extjson v0.0.12 h1:YmwcbNjUtXQtIx0AF7ZtCCPVdHfViyq5PaWwWk332Iw=
+github.com/arturmartini/extjson v0.0.12/go.mod h1:33dH8g58kYzhh6RYgIE+pJWFF9L+kszFitPRE4YsAgs=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/konsorten/go-windows-terminal-sequences v1.0.3 h1:CE8S1cTafDpPvMhIxNJKvHsGVBgn1xWYf1NbHQhywc8=

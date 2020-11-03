@@ -31,6 +31,7 @@ func TestGets(t *testing.T) {
 	vFloat := GetFloat("key_float")
 	vList := GetListStr("key_list")
 	vMap := GetMapStr("key_map")
+	vBool := GetBool("key_bool")
 
 	validateTest(t, "value1", vStr)
 	validateTest(t, 1, vInt)
@@ -39,6 +40,7 @@ func TestGets(t *testing.T) {
 	validateTest(t, 1, len(vMap))
 	validateTest(t, "arg_test", vArgStr)
 	validateTest(t, "env1", vEnvStr)
+	validateTest(t, true, vBool)
 }
 
 func TestGetsAsCode(t *testing.T) {

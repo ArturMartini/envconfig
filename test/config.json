@@ -13,6 +13,7 @@
   "key_map": {
     "k1": "v1"
   },
+  "key_bool": true,
   "envconfig": {
     "args": [
       "config-dir",

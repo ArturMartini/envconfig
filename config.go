@@ -50,6 +50,10 @@ func GetFloat(key string) float64 {
 	return extjson.GetFloat(key)
 }
 
+func GetBool(key string) bool {
+	return extjson.GetBool(key)
+}
+
 func GetListStr(key string) []string {
 	return extjson.GetList(key)
 }
