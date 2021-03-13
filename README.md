@@ -10,8 +10,8 @@ Envconfig is a library to simplify initialize golang program based on json file,
 * Set default value
 * Abstract the complex bind and validate structure
 
-Commonly systems need get program arguments, environments variable, properties in config file
-and validate. Our library can hep you to simplify this process.
+Commonly systems need setting program arguments, environments variable, properties on config file
+and validate. Our library can help you to simplify this process.
 
 Usage:
 ```go
@@ -20,7 +20,7 @@ import "github.com/arturmartini/envconfig"
 
 func main() {
     //Process read a config file and this file can
-    //have some metadata to envconfig to check required fields and set default values
+    //has some metadata to envconfig to check required fields and set default values
     //can send metadata as code with Configuration struct in Initialize func
     //can accesss sub values with separator "."
     envconfig.Initialize("your_path_config_file.json", nil)
@@ -29,7 +29,7 @@ func main() {
 }
 
 func doSomething(param string) {
-    //you maybe need get webservice, database address or system property
+    //you maybe need set webservice address, database address or system properties
 }
 ```
 
@@ -54,8 +54,8 @@ Configuration in file:
     }
   }
 ```
-* The fields required is properties, variable environment or program arguments and all is validate
-* Default to be definied is default value to key, if key has value in file, enviroment or aguments the default value is overrided
+* The fields required are properties, variables environments or program arguments and all are validate
+* Default field is default value to key, if key has value in file, enviroments or aguments the default value is overrided
 
 
 ```go
