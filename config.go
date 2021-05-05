@@ -3,10 +3,11 @@ package envconfig
 import (
 	"errors"
 	"fmt"
-	"github.com/arturmartini/extjson"
-	log "github.com/sirupsen/logrus"
 	"strconv"
 	"time"
+
+	"github.com/arturmartini/extjson"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -48,6 +49,10 @@ func GetInt(key string) int {
 
 func GetFloat(key string) float64 {
 	return extjson.GetFloat(key)
+}
+
+func GetMap(key string) map[string]interface{} {
+	return extjson.GetMap(key)
 }
 
 func GetBool(key string) bool {
