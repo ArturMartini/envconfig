@@ -31,6 +31,7 @@ func TestGets(t *testing.T) {
 	vFloat := GetFloat("key_float")
 	vList := GetListStr("key_list")
 	vMap := GetMapStr("key_map")
+	vMapInterface := GetMap("key_map")
 	vBool := GetBool("key_bool")
 
 	validateTest(t, "value1", vStr)
@@ -38,6 +39,7 @@ func TestGets(t *testing.T) {
 	validateTest(t, 2.01, vFloat)
 	validateTest(t, 2, len(vList))
 	validateTest(t, 1, len(vMap))
+	validateTest(t, 1, len(vMapInterface))
 	validateTest(t, "arg_test", vArgStr)
 	validateTest(t, "env1", vEnvStr)
 	validateTest(t, true, vBool)
@@ -47,13 +49,13 @@ func TestGetsAsCode(t *testing.T) {
 	os.Args = append(os.Args, "address=arg_test")
 	os.Setenv("env_test", "env_test")
 	config := &Configuration{
-		Envs:     []string{
+		Envs: []string{
 			"env_test",
 		},
-		Args:     []string{
+		Args: []string{
 			"address",
 		},
-		Default:  map[string]string{
+		Default: map[string]string{
 			"def": "v1",
 		},
 	}
